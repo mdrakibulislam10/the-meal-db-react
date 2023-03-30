@@ -5,7 +5,7 @@ import Foods from '../Foods/Foods';
 const FoodsContainer = () => {
     const [foods, setFoods] = useState([]);
 
-    const [food, setFood] = useState({}); // we can use [];
+    const [food, setFood] = useState([]); // we can use {};
 
     useEffect(() => {
         fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=fish")
@@ -17,7 +17,22 @@ const FoodsContainer = () => {
     const foodHandler = (food) => {
         // console.log(food);
         setFood(food);
+
+        // set food to local storage
+        localStorage.setItem("food-details", food.idMeal);
     };
+
+    // get food from local storage
+    useEffect(() => {
+        const storedFood = localStorage.getItem("food-details");
+        // console.log(storedFood);
+
+        const reDisplayFood = foods.find(food => food.idMeal === storedFood);
+        if (reDisplayFood) {
+            setFood(reDisplayFood);
+            // console.log(reDisplayFood);
+        }
+    }, [foods]);
 
     return (
         <section className='container row d-md-flex'>
